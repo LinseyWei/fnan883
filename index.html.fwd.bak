@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=syllabus.html">
+    <title>Redirecting to Syllabus</title>
+</head>
+<body>
+    <p>Redirecting to the <a href="syllabus.html">syllabus</a>...</p>
+</body>
+</html>

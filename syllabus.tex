@@ -1,0 +1,525 @@
+\documentclass[letterpaper,12pt]{article}
+
+\usepackage{lwarp}
+\newcommand{\showdetails}{show details}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage{fontspec}
+%\setmainfont{Times New Roman}
+\usepackage{graphicx,graphics}
+\usepackage{xcolor}
+\usepackage{etoolbox}
+%\usepackage{etextools}
+\definecolor{darkblue}{rgb}{0,.1,.6}
+\definecolor{darkred}{rgb}{.4,.1,0}
+\definecolor{darkgreen}{rgb}{0,.4,.1}
+\usepackage{enumitem}
+\usepackage{ifthen}
+
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{ragged2e}
+\usepackage{array}
+% Check if compiling for HTML via lwarp (WarpHTML is defined)
+
+\makeatletter
+% Check for \c@LWR@HTMLpagenum which is exclusively active during the lwarp HTML compilation pass
+\ifx\c@LWR@HTMLpagenum\@undefined
+  % === PDF / pdflatex Rules ===
+  \newcolumntype{T}[1]{p{#1}}
+  \newcolumntype{B}[1]{b{#1}}
+\else
+  % === HTML / lwarp Rules ===
+  % Effectively swaps p and b assignments for HTML rendering
+  \newcolumntype{T}[1]{b{#1}}
+  \newcolumntype{B}[1]{p{#1}}
+\fi
+\makeatother
+
+\usepackage{pdflscape}
+%\usepackage{natbib}
+\usepackage{booktabs}
+%\usepackage[sortcites = true,sorting = ydnt,backend = bibtex,natbib,style = chicago-authordate, maxbibnames=99,dashed=false, refsection=section]{biblatex}
+%\usepackage[sortcites = true, sorting = ynt, backend = biber, natbib=true, style=authoryear, maxbibnames=99,dashed=false]{biblatex}
+\usepackage[sortcites = true, 
+              sorting = ynt, 
+              backend = biber, 
+              natbib  = true, 
+              citestyle=authoryear, 
+              bibstyle=numeric, 
+              maxbibnames=99,
+              uniquename=false,
+              defernumbers=true]{biblatex}
+%\makeatletter
+%\input{numeric.bbx} % Imports missing numeric list macros
+%$\makeatother
+%\DeclareFieldFormat{labelnumberwidth}{\mkbibbrackets{A#1}}
+\DeclareFieldFormat{labelnumberwidth}{#1}
+\DeclareFieldFormat{labelnumber}{#1}
+
+%|\renewcommand*\labelenumi{\theenumi.}
+%|\defbibenvironment{bibliography} {\begin{enumerate}} {\end{enumerate}} {\item}
+%|%\addbibresource{fnan893bib}
+\addbibresource{../../bib/all_sorted.bib}
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\ref*{#1}\; \nameref*{#1}}} %
+
+% --- Patch to make the entire author-year citation a link ---
+% --- THE ROBUST HYPERLINK PATCH ---
+%%||% This forces biblatex to wrap BOTH the author and year in a link anchor
+%%||\DeclareFieldFormat{citehyperref}{%
+%%||  \DeclareFieldAlias{bibhyperref}{default}%
+%%||  \bibhyperref{#1}}
+%%||\savebibmacro{cite}
+%%||\renewbibmacro*{cite}{%
+%%||  \printtext[citehyperref]{%
+%%||    \restorebibmacro{cite}%
+%%||    \usebibmacro{cite}}}
+%%||% ----------------------------------
+
+%%||    % Hook 1: Makes the Author Names a clickable link
+%%||\DeclareNameWrapperFormat{citehyperref}{%
+%%||  \DeclareFieldAlias{bibhyperref}{default}%
+%%||  \bibhyperref{#1}}
+%%||% Hook 2: Makes the Year block inside parentheses a clickable link
+%%||\DeclareFieldFormat{bibhyperref}{#1}
+
+%%||% --- FORCE AUTHOR NAMES IN CITATIONS TO BE HYPERLINKS ---
+%%||\savebibmacro{name:cite}
+%%||\renewbibmacro*{name:cite}[4]{%
+%%||  \printtext[citehyperref]{%
+%%||    \restorebibmacro{name:cite}%
+%%||    \usebibmacro{name:cite}{#1}{#2}{#3}{#4}}}
+%%||% --------------------------------------------------------
+
+%%||% --- MAKE CITEAUTHOR A CLICKABLE HYPERLINK ---
+%%||\DeclareCiteCommand{\citeauthor}
+%%||  {\boolfalse{cbx:longnames}%
+%%||   \usebibmacro{prenote}}
+%%||  {\printtext[citehyperref]{\printnames{labelname}}}
+%%||  {\multicitedelim}
+%%||  {\usebibmacro{postnote}}
+%%||% ---------------------------------------------
+%| % --- CLEAN CITEAUTHOR HYPERLINK (No Style Dependencies) ---
+%|\DeclareCiteCommand{\citeauthor}
+%|  {\usebibmacro{prenote}}
+%|  {\printtext[citehyperref]{\printnames{labelname}}}
+%|  {\multicitedelim}
+%|  {\usebibmacro{postnote}}
+% ----------------------------------------------------------
+  \DeclareCiteCommand{\citeauthor}
+  {\usebibmacro{prenote}}
+  {\printtext[bibhyperref]{\printnames{labelname}}} % Uses bibhyperref to force a link tracker
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+% -----------------------------------------
+  % --- THE WORKING CITEYEAR HYPERLINK ---
+\DeclareCiteCommand{\citeyear}
+  {\usebibmacro{prenote}}
+  {\printtext[bibhyperref]{\printfield{labelyear}\printfield{extrayear}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+% ---------------------------------------
+
+
+\newcommand{\ca}[1]{\citeauthor{#1} (\citeyear{#1})}
+
+%\bibliographystyle{plain}
+%\usepackage{bibentry}
+%\makeatletter
+%\renewcommand\bibentry[1]{\nocite{#1}{\frenchspacing
+%     \@nameuse{BR@r@#1\@extra@b@citeb}}}
+%\makeatother
+
+\usepackage{environ}
+\NewEnviron{details}{\ifthenelse{\isundefined{\showdetails}}{}{\BODY}}
+
+\usepackage[margin=1in]{geometry}
+%\include{common/course}
+%\include{course}
+%\include{dates}
+%\include{program_outcomes}
+
+\usepackage[pdfusetitle]{hyperref}
+\hypersetup{pdfauthor={},%
+           pdftitle={FNAN 883 Syllabus},%
+           colorlinks,%
+           citecolor=darkblue,%
+           filecolor=black,%
+           linkcolor=darkblue,%
+           urlcolor=darkblue,%
+           plainpages=false,%
+           %pdfpagelables=true%
+           }
+\usepackage{cleveref}
+
+\setlength\parindent{0pt}
+\parskip=6pt
+
+%\title{\hspace*{1.7cm}\includegraphics[height=100px]{theme/sob.png} \begin{minipage}{.5\textwidth}{\fontfamily{cmss}\selectfont\Huge School of Business \vspace{55pt}}\end{minipage}
+%\\[2pt]
+%\classfullname
+%}
+\title{\Large FNAN 883 Syllabus}
+
+
+\author{{\Large Empirical Asset Pricing}\\[5mm]Alex Philipov}
+%\date{\detailclassdegreeandnumber, \detailclassperiod}
+\date{Fall 2026}
+
+\begin{document}
+%\nobibliography*
+{
+\vspace*{-30mm}
+\begin{BlockClass}{center}
+\centering\includegraphics[width=0.5\textwidth]{ccb3}\par
+\end{BlockClass}
+\vspace*{10mm}
+\let\newpage\relax
+\maketitle
+}
+
+\subsection*{Classes and Contact}
+\begin{flushleft}
+\begin{tabular}{p{0.3\textwidth}p{.7\textwidth}}
+%Classes& \classschedule\\
+        Classes
+\newline Class meetings location 
+\newline Office 
+\newline Telephone Number 
+\newline e-mail
+\newline Office Hours 
+  & 
+  Tuesday, 10:30-13:10
+\newline IN 139
+\newline Enterprise Hall 329 
+\newline (703) 993-1762
+\newline \href{mailto:aphilipo@gmu.edu}{\nolinkurl{aphilipo@gmu.edu}}
+\newline By appointment 
+\end{tabular}
+\end{flushleft}
+
+\subsection*{Course Description}
+This course is about efficient markets and empirical asset pricing. 
+We start with reviewing asset pricing theories, asset pricing models,
+and return predictability. We then focus on cross-sectional asset
+pricing tests and review the standard methodologies proposed in the
+literature. We study tests of the CAPM and multi-factor models,
+including time-series regressions, cross-sectional regressions and
+GMM. Part of class time is also dedicated to the construction of
+factors and portfolios for testing. In the second part of the course,
+we review the applications of asset pricing models to mutual funds,
+hedge funds and event studies. We will complete the course with a brief review
+of behavioral finance.
+
+The class will focus on in-class presentations by students, which will constitute 60\% of the grade
+
+\subsection*{Course Objectives}
+\begin{enumerate}
+   \item Develop skills to work with data and conduct empirical analysis in asset pricing
+   \item Gain the skills and tools to make professional presentations for an academic audience
+   \item Be able to critically evaluate contributions to the
+      discipline in working and published academic papers.  
+\end{enumerate}
+
+
+\section*{\vspace*{-10mm}\;}
+%\begin{refsegment}
+\begin{refsection}
+\nocite{cochrane:05}
+\nocite{campbell-lo-mackinlay:97}
+\nocite{thaler:05}
+\nocite{goyal:12}
+%
+\begingroup
+\DeclareFieldFormat{labelnumberwidth}{}
+%\printbibliography[segment=1,heading=subbibliography,  title={Textbooks}]
+\printbibliography[heading=subbibliography,  title={Textbooks}]
+\endgroup
+%\end{refsegment}
+\end{refsection}
+
+
+\section*{Course Contents and Tentative Schedule}
+
+The table below presents the topics covered in each week of the class
+\bigskip
+
+\renewcommand{\arraystretch}{2}
+%\begin{longtable}{p{.07\textwidth} >{\RaggedRight}p{0.43\textwidth} >{\RaggedRight}p{0.50\textwidth} }
+\begin{longtable}{T{.07\textwidth} >{\RaggedRight}T{0.43\textwidth} >{\RaggedRight}T{0.50\textwidth} }
+ \toprule
+ {\bf Date}& \hspace*{1mm}\bf Topic & {\centering\bf Readings/Assignments}\\
+ \midrule
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  1&  \nameref{AP}                                                       &\href{Notes1.pdf}{Notes 1}                   \\                 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  2&                                                                     
+   &                                             
+         review of \ca{fama-french:15}
+\newline review of \ca{fama-french:18}
+\newline review of \ca{daniel-hirshleifer-sun:20}
+\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  3&  \nameref{ME}
+      \newline\textbullet time-series tests
+      \newline\textbullet cross-sectional tests
+      \newline\textbullet Fama-MacBeth approach
+   &\href{Notes1.pdf}{Notes 1}
+   \newline\href{hw01_fnan883_2026.pdf}{Homework 1}
+   \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  4&                                                                          &                                             \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  5&  \nameref{EM}
+      \newline\textbullet Portfolio sorts
+      \newline\textbullet Cross-sectional regressions
+      \newline\textbullet Adjusting for risk
+      \newline\qquad- BCS (1998) method
+      \newline\qquad-  DGTW (1997) 
+               &
+    \href{Notes2.pdf}{Notes 2}
+    \newline\;\newline 
+    \ca{brennan-chordia-subrahmanyam:98}
+    \newline  \ca{daniel-grinblatt-titman-wermers:97} 
+    \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  6&                                                                          &                                             \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  7&  \nameref{ANO}
+   \newline\textbullet Size and book-to-market
+   \newline\textbullet Momentum
+   \newline\textbullet Credit risk and dispersion
+   \newline\textbullet Idiosyncratic volatility 
+   & 
+   \newline\ca{fama-french:92}\newline\ca{jegadeesh-titman:93}, JNPS (2013)
+   \newline\ca{dichev:98}, DMS (2002)\newline\ca{ang-hodrick-xing-zhang:06}     \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  8&Anomalies' explanations
+   \newline\textbullet    Risk-based
+   \newline\qquad- more factors
+   \newline\qquad- characteristics vs.~factors
+   \newline\qquad- dynamic models
+   \newline\qquad- alternative models (investment CAPM)
+   \newline\textbullet   Estimation issues
+   \newline\qquad- Data snooping 
+   \newline\qquad- Learning post-publication
+   &                                             \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk  9& 
+    \textbullet Market frictions
+    \newline\qquad- Limits to arbitrage
+    \newline\qquad- Illiquidity and short-sale constraints
+    \newline\qquad- Microstructure noise
+    \newline\textbullet Behavioral 
+    \newline\qquad-  overreaction and underreaction
+    \newline\qquad-  investor sentiment
+    \newline\qquad-  prospect theory
+    \newline\qquad-  optimism
+    \newline\qquad-  overconfidence
+& \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk 10&  \nameref{MF}                                                    &                                             \\                                                                         &                                             \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk 11&                                                              &                                             \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk 12&  \nameref{ES}                                                                        &                                             \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk 13&  \nameref{BF}                                                            &                                             \\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   NEXT ROW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wk 14&                                                                          &                                             \\
+   %\finaldate  \
+\bottomrule
+\end{longtable}
+
+
+\begin{landscape}
+\begin{footnotesize}
+\renewcommand{\arraystretch}{2}
+\nopagebreak[6]
+	\vspace*{-20mm}
+%\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} | >{\RaggedRight}p{0.2\textwidth} | >{\RaggedRight}p{0.2\textwidth} | >{\RaggedRight}p{0.2\textwidth} | >{\RaggedRight}p{0.2\textwidth} | >{\RaggedRight}p{0.2\textwidth} } \toprule
+%\begin{longtable}{| >{\RaggedRight}p{0.14\textwidth} | >{\RaggedRight}p{0.19\textwidth} | >{\RaggedRight}p{0.19\textwidth} | >{\RaggedRight}p{0.19\textwidth} | >{\RaggedRight}p{0.19\textwidth} |} 
+\begin{longtable}{| >{\RaggedRight}p{0.14\textwidth} | >{\RaggedRight}p{0.30\textwidth} | >{\RaggedRight}p{0.30\textwidth} | >{\RaggedRight}p{0.30\textwidth} | >{\RaggedRight}p{0.30\textwidth} |} 
+   \multicolumn{5}{@{}l}{\bf Presentation Rubric} \\\bottomrule
+   &\centering Needs Improvement       &\centering  Fair &          Good       &          Excellent \\\hline
+Calculations (25\%) 
+   & Only some calculations are accurate and/or excess ambiguity exists in either steps taken to arrive at mathematical answers and/or methods selected to find solutions. 
+   & Most calculations performed with adequate accuracy but ambiguity exists in calculations. More precise and/or detailed execution needed. 
+   & Most/majority of calculations performed with accuracy and completeness. Steps are conveyed in a sufficient manner. Little or no ambiguity in mathematical calculations
+   & All calculations performed with accuracy and completeness. All steps are conveyed to arrive at solutions. No ambiguity in mathematical calculations and/or steps taken
+\\\hline
+Technical Presentation (25\%)        
+   & Graphs and/or tables may be inaccurate and/or not informative. Graphing/display needs some of the following: title, proper styles and coloring, axis magnitudes, tick values/marks, x-label, y-label, annotation text, and points on the graph/table. 
+   & Graphs and/or tables are somewhat accurate and informative. Graphing/display includes some of the following: title, proper styles and coloring, axis magnitudes, tick values/marks, x-label, y-label, annotation text, and points on the graph/table.
+   & Graphs and/or tables are accurate and informative. Graphing/display includes most of the following: title, proper styles and coloring, axis magnitudes, tick values/marks, x-label, y-label, annotation text, and points on the graph/table. 
+   & Graphs and/or tables are highly accurate and informative. Graphing/display includes title, proper styles and coloring, axis magnitudes, tick values/marks, x-label, y-label, annotation text, and points on the graph/table.
+   \\\hline
+Technical Explanations (25\%)       
+   & Interpretation of results in written format is only somewhat conveyed. Calculations, graphs, takeaways, and/or strategic or mathematical relationships may be ambiguous in explanations provided. 
+   & Interpretation of results in written format is mostly conveyed. Calculations, graphs, takeaways, and/or strategic or mathematical relationships can be mostly understood from explanations provided. 
+   & Interpretation of results in written format conveyed adequately. Calculations, graphs, takeaways, and/or strategic or mathematical relationships can be understood from explanations provided. 
+   & Interpretation of results in written format is very clearly conveyed.  Calculations, graphs, takeaways, and/or strategic or mathematical relationships can be distinctly understood from explanations provided.
+   \\\hline
+Overall\newline Presentation and Strategy (25\%) 
+   & Recommendations provided and strategic importance of the assignment is not clearly conveyed in the assignment submission. Evidence provided and connections are either not attempted or not clearly made between calculations and/or theory to provide practical application for investors to utilize.
+   & Recommendations provided and strategic importance of the assignment is mostly available in assignment submission. Evidence and connections are made and/or attempted between calculations and/or theory to practical application for investors to utilize. 
+   & Recommendations provided and strategic importance of the assignment is available in the assignment submission. Evidence is and connections can be made between calculations and/or theory to practical application for investors to utilize. 
+   & Recommendations provided and strategic importance of the assignment is well crafted and on display in the assignment submission.  Evidence is provided and connections are clearly made from calculations and/or theory to practical application for investors to utilize.
+\\ \hline
+\end{longtable}
+\end{footnotesize}
+\end{landscape}
+
+%\section{Static Asset Pricing Models}
+%\section*{\vspace*{-10mm}\;}
+\makeatletter
+\defbibheading{bibnumbered}[\refname]{%
+  \begingroup
+  % Temporarily modify the internal font definition for sections to \large
+  \def\size@section{\normalfont\large\bfseries}%
+  % Patch the standard LaTeX section macro locally
+  \let\old@startsection\@startsection
+  \renewcommand{\@startsection}[6]{\old@startsection{##1}{##2}{##3}{##4}{##5}{\size@section}}%
+  % Call the standard section with biblatex's title argument
+  \section{#1}%
+  \endgroup
+}
+\makeatother
+
+\begin{refsegment}
+%\begin{refsection}
+\nocite{sharpe:64}
+\nocite{fama-french:92}
+\nocite{fama-french:93}
+\nocite{fama-french:96a}
+\nocite{fama-french:15}
+\nocite{fama-french:18}
+%\nocite{hou-xue-zhang:15}
+\nocite{stambaugh-yuan:17}
+\nocite{daniel-hirshleifer-sun:20}
+\nocite{cooper-gulen-ion:24}
+%
+%\defbibheading{bibnumbered}[\refname]{%
+%  \section{\normalsize #1}% Replace \large with your preferred font size
+%}
+%\defbibheading{bibnumbered}[\refname]{%
+%\refstepcounter{section}
+%  \section*{\large\thesection\;#1}% Manually build the numbered look
+%  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}% Add to ToC
+%}
+%Refsegment is: \therefsegment \\
+%Refname is: \refname\\
+
+%\printbibliography[segment=2,heading=bibnumbered, title={Static Asset Pricing Models\label{AP}}]
+\printbibliography[segment=\therefsegment ,heading=subbibliography, resetnumbers=false, title={Static Asset Pricing Models\label{AP}}]
+%\printbibliography[heading=subbibliography, resetnumbers=false, title={Textbooks}]
+
+\end{refsegment}
+%\end{refsection}
+
+%\section*{\vspace*{-10mm}\;}
+\begin{refsegment}
+%\begin{refsection}
+   \nocite{richardson-stock:89}
+   \nocite{fama:91}
+   \nocite{jegadeesh-titman:01}
+   \nocite{chordia-shivakumar:06}
+   \nocite{daniel-titman:06}
+   \nocite{avramov-chordia-jostova-philipov:07}
+   \nocite{cooper-gulen-schill:08}
+   \nocite{boudoukh-richardson-whitelaw:08}
+   \nocite{pontiff-woodgate:08}
+   \nocite{asness-moskowitz-pedersen:13}
+   \nocite{hou-mo-xue-zhang:19}
+
+%Refsegment is: \therefsegment\\
+
+%\printbibliography[segment=\therefsegment,heading=bibnumbered, resetnumbers=false, title={Market Efficiency and Asset Pricing Tests\label{ME}}]
+\printbibliography[segment=\therefsegment,heading=subbibliography, resetnumbers=false, title={Market Efficiency and Asset Pricing Tests\label{ME}}]
+%\printbibliography[heading=subbibliography, resetnumbers=false, title={Market Efficiency and Asset Pricing Tests\label{ME}}]
+\end{refsegment}
+%\end{refsection}
+
+%\section*{\vspace*{-10mm}\;}
+\begin{refsegment}
+   \nocite{fama-macbeth:73}
+   \nocite{breeden-litzenberger:78}
+   \nocite{breeden-gibbons-litzenberger:89}
+   \nocite{gibbons-ross-shanken:89}
+   \nocite{brennan-chordia-subrahmanyam:98}
+   \nocite{lettau-ludvigson:01}
+   \nocite{lewellen-nagel:06}
+   \nocite{avramov-chordiaRFS:06}
+   \nocite{feng-giglio-xiu:20}
+   \nocite{jensen-kelly-malamud-pedersen:26}
+%\printbibliography[segment=\therefsegment,heading=bibnumbered, title={Empirical Methods\label{EM}}]
+\printbibliography[segment=\therefsegment,heading=subbibliography, resetnumbers=false, title={Empirical Methods\label{EM}}]
+\end{refsegment}
+
+%\section*{\vspace*{-10mm}\;}
+\begin{refsegment}
+   \nocite{jegadeesh-titman:93}
+   \nocite{jegadeesh-titman:95}
+   \nocite{dichev:98}
+   \nocite{avramov-chordia-jostova-philipov:07}
+   \nocite{campbell-hilscher-szilagyi:08}
+   \nocite{diether-malloy-scherbina:02}
+   \nocite{avramov-chordia-jostova-philipov:09a}
+   \nocite{ang-hodrick-xing-zhang:06}
+   \nocite{jostova-nikolova-philipov-stahel:13}
+   \nocite{fama-french:08}
+   \nocite{hou-xue-zhang:15}
+%\printbibliography[segment=\therefsegment,heading=bibnumbered, title={Anomalies\label{ANO}}]
+\printbibliography[segment=\therefsegment,heading=subbibliography, title={Anomalies\label{ANO}}]
+\end{refsegment}
+
+%\section{Mutual Funds and Hedge Funds}
+%\section*{\vspace*{-10mm}\;}
+\begin{refsegment}
+\nocite{carhart:97}
+\nocite{grinblatt-titman-wermers:95}
+\nocite{daniel-grinblatt-titman-wermers:97}
+\nocite{berk-green:04}
+\nocite{fama-french:10}
+\nocite{fung-hsieh:97}
+\nocite{liang:00}
+\nocite{grinblatt-jostova-petrasek-philipov:20}
+\nocite{gupta-liang:05}
+\nocite{agarwal-naik:04}
+\nocite{getmansky-lo-makarov:04}
+%
+%\printbibliography[segment=\therefsegment,heading=bibnumbered, title={Mutual Funds and Hedge Funds\label{MF}}]
+\printbibliography[segment=\therefsegment,heading=subbibliography, title={Mutual Funds and Hedge Funds\label{MF}}]
+\end{refsegment}
+
+%\section*{\vspace*{-10mm}\;}
+\begin{refsegment}
+\nocite{bernard-thomas:89}
+\nocite{bernard-thomas:90}
+\nocite{chan-jegadeesh-lakonishok:96}
+%\nocite{chandy-davidson-garrison:85}
+\nocite{holthausen-leftwich:86}
+\nocite{mackinlay:97}
+\nocite{salinger:92}
+%
+%\printbibliography[segment=7,heading=bibnumbered, title={Event Studies\label{ES}}]
+\printbibliography[segment=\therefsegment,heading=subbibliography, title={Event Studies\label{ES}}]
+\end{refsegment}
+
+%\section*{\vspace*{-10mm}\;}
+\begin{refsegment}
+\nocite{daniel-hirshleifer-subrahmanyam:98}
+\nocite{daniel-hirshleifer-subrahmanyam:01}
+\nocite{daniel-titman:97}
+\nocite{hirshleifer-lim-teoh:09}
+\nocite{hirshleifer-lim-teoh:11}
+\nocite{hirshleifer-teoh:03}
+\nocite{baker-wurgler:06}
+\nocite{stambaugh-yu-yuan:12}
+\nocite{stambaugh-yu-yuan:14}
+%
+%\printbibliography[segment=8,heading=bibnumbered, title={Behavioral Finance\label{BF}}]
+\printbibliography[segment=\therefsegment,heading=subbibliography, title={Behavioral Finance\label{BF}}]
+\end{refsegment}
+
+\end{document}
