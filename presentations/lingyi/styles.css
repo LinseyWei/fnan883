@@ -1,15 +1,10 @@
-* { box-sizing: border-box; }
-body { margin: 0; background: #fff; color: #222; font-family: Georgia, "Times New Roman", serif; line-height: 1.6; }
-main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
-header { text-align: center; border-bottom: 2px solid #006633; padding-bottom: 20px; }
-h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.2; }
-h2 { font-size: 1.3rem; margin: 24px 0 8px; }
-p { margin: 10px 0; }
-.course { color: #47554c; font-family: Arial, sans-serif; font-size: .9rem; }
-a { color: #006633; text-underline-offset: 3px; }
-a:hover { color: #003d1f; }
-a:focus-visible { outline: 3px solid #b18b24; outline-offset: 3px; }
-.slides { display: block; width: 100%; height: 80vh; min-height: 420px; border: 1px solid #b7beb9; }
-nav { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 28px; border-top: 1px solid #ccc; padding-top: 16px; }
-.presentation-list li { padding: 8px 0 20px; }
-@media (max-width: 600px) { main { padding: 20px 16px; } .slides { height: 65vh; min-height: 320px; } }
+/* Use the same course stylesheet and page structure as Tan's presentation. */
+.paper-details th {
+  font-weight: normal;
+  text-align: left;
+  vertical-align: top;
+  padding-right: 1em;
+}
+.paper-details td { vertical-align: top; overflow-wrap: anywhere; }
+.slides { max-width: 100%; }
+a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
