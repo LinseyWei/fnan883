@@ -1,0 +1,4 @@
+# macOS Finder metadata. Never belongs in the repo, and OneDrive syncing this
+# folder regenerates it constantly.
+.DS_Store
+._*
