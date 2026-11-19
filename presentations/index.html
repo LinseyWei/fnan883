@@ -100,15 +100,16 @@ Branch from <span class="texttt">main</span>, put your slides in
     return;
   }
 
-  // Chronological, matching the order of the seminar.
-  items.sort(function (a, b) { return String(a.date || '').localeCompare(String(b.date || '')); });
+  // Seminar order. Weeks, not dates - the class does not always meet on the
+  // same weekday, so a date would be guesswork for anyone filling this in.
+  items.sort(function (a, b) { return (Number(a.week) || 0) - (Number(b.week) || 0); });
 
   items.forEach(function (p) {
     var row = table.insertRow();
 
     var when = row.insertCell();
     when.className = 'tdb';
-    when.textContent = p.date || '';
+    when.textContent = p.week ? 'Wk ' + p.week : '';
 
     var who = row.insertCell();
     who.className = 'tdb';

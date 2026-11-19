@@ -47,7 +47,7 @@ cp presentations/tan/index.html presentations/your-name/index.html
 **4. Register it.** Append **one line** to the bottom of `presentations.js`:
 
 ```js
-PRESENTATIONS.push({ presenter: "Your Name", slug: "your-name", title: "Paper Title", authors: "Author and Author (2024)", source: "Journal of Finance 79, 1–40", date: "2026-10-15" });
+PRESENTATIONS.push({ presenter: "Your Name", slug: "your-name", title: "Paper Title", authors: "Author and Author (2024)", source: "Journal of Finance 79, 1–40", week: 6 });
 ```
 
 `slug` must match your folder name. By default the entry links to that
@@ -57,7 +57,7 @@ If you present more than once, give each talk its own page and add an optional
 `page` field pointing at it, so every row links straight to the right talk:
 
 ```js
-PRESENTATIONS.push({ presenter: "Your Name", slug: "your-name", page: "your-name/p2.html", title: "Second Paper", authors: "Author (2008)", source: "Journal of Finance 63, 921–945", date: "2026-09-15" });
+PRESENTATIONS.push({ presenter: "Your Name", slug: "your-name", page: "your-name/p2.html", title: "Second Paper", authors: "Author (2008)", source: "Journal of Finance 63, 921–945", week: 4 });
 ```
 
 The class convention is `p1.html`, `p2.html`, ... inside your folder, with an

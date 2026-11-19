@@ -18,7 +18,9 @@
      title     - title of the paper you presented
      authors   - author list, e.g. "Fama and French (2015)"
      source    - journal / working paper reference
-     date      - presentation date, YYYY-MM-DD
+     week      - which week of the seminar you presented, as a number. The
+                 collection page orders by it. Weeks rather than dates: the
+                 class does not always meet on the same weekday.
      page      - optional; the page for this particular talk, as a path under
                  presentations/ (e.g. "tan/p2.html"). Omit it and the entry
                  links to your folder's index.html instead. Use it when you
@@ -27,9 +29,9 @@
 
 window.PRESENTATIONS = window.PRESENTATIONS || [];
 
-PRESENTATIONS.push({ presenter: "Tan", slug: "tan", page: "tan/p1.html", title: "A Five-Factor Asset Pricing Model", authors: "Fama and French (2015)", source: "Journal of Financial Economics 116, 1–22", date: "2026-09-01" });
-PRESENTATIONS.push({ presenter: "Lingyi", slug: "lingyi", page: "lingyi/p1.html", title: "Choosing Factors", authors: "Fama and French (2018)", source: "Journal of Financial Economics 128, 234–252", date: "2026-09-01" });
-PRESENTATIONS.push({ presenter: "Zihao", slug: "zihao", page: "zihao/p1.html", title: "Short- and Long-Horizon Behavioral Factors", authors: "Daniel, Hirshleifer, and Sun (2020)", source: "Review of Financial Studies 33, 1673–1736", date: "2026-09-01" });
-PRESENTATIONS.push({ presenter: "Tan", slug: "tan", page: "tan/p2.html", title: "Share Issuance and Cross-sectional Returns", authors: "Pontiff and Woodgate (2008)", source: "Journal of Finance 63, 921–945", date: "2026-09-15" });
-PRESENTATIONS.push({ presenter: "Lingyi", slug: "lingyi", page: "lingyi/p2.html", title: "Asset Growth and the Cross-Section of Stock Returns", authors: "Cooper, Gulen, and Schill (2008)", source: "Journal of Finance 63, 1609–1651", date: "2026-09-15" });
-PRESENTATIONS.push({ presenter: "Zihao", slug: "zihao", page: "zihao/p2.html", title: "Value and Momentum Everywhere", authors: "Asness, Moskowitz, and Pedersen (2013)", source: "Journal of Finance 68, 929–985", date: "2026-09-15" });
+PRESENTATIONS.push({ presenter: "Tan", slug: "tan", page: "tan/p1.html", title: "A Five-Factor Asset Pricing Model", authors: "Fama and French (2015)", source: "Journal of Financial Economics 116, 1–22", week: 2 });
+PRESENTATIONS.push({ presenter: "Lingyi", slug: "lingyi", page: "lingyi/p1.html", title: "Choosing Factors", authors: "Fama and French (2018)", source: "Journal of Financial Economics 128, 234–252", week: 2 });
+PRESENTATIONS.push({ presenter: "Zihao", slug: "zihao", page: "zihao/p1.html", title: "Short- and Long-Horizon Behavioral Factors", authors: "Daniel, Hirshleifer, and Sun (2020)", source: "Review of Financial Studies 33, 1673–1736", week: 2 });
+PRESENTATIONS.push({ presenter: "Tan", slug: "tan", page: "tan/p2.html", title: "Share Issuance and Cross-sectional Returns", authors: "Pontiff and Woodgate (2008)", source: "Journal of Finance 63, 921–945", week: 4 });
+PRESENTATIONS.push({ presenter: "Lingyi", slug: "lingyi", page: "lingyi/p2.html", title: "Asset Growth and the Cross-Section of Stock Returns", authors: "Cooper, Gulen, and Schill (2008)", source: "Journal of Finance 63, 1609–1651", week: 4 });
+PRESENTATIONS.push({ presenter: "Zihao", slug: "zihao", page: "zihao/p2.html", title: "Value and Momentum Everywhere", authors: "Asness, Moskowitz, and Pedersen (2013)", source: "Journal of Finance 68, 929–985", week: 4 });
