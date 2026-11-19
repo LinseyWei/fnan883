@@ -119,8 +119,12 @@ Branch from <span class="texttt">main</span>, put your slides in
 
     var para = document.createElement('p');
     var link = document.createElement('a');
-    // Slug becomes a path segment, so keep it to safe characters.
-    link.href = String(p.slug || '').replace(/[^A-Za-z0-9._-]/g, '') + '/';
+    // "page" is a path under presentations/ (e.g. "tan/p2.html"); with no
+    // "page", a bare slug links to that student's folder. Both are sanitised:
+    // no absolute paths, no parent-directory escapes.
+    link.href = p.page
+      ? String(p.page).replace(/\.\./g, '').replace(/^\/+/, '').replace(/[^A-Za-z0-9._\/-]/g, '')
+      : String(p.slug || '').replace(/[^A-Za-z0-9._-]/g, '') + '/';
     link.textContent = p.title || 'Untitled';
     para.appendChild(link);
 

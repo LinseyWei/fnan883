@@ -50,7 +50,18 @@ cp presentations/tan/index.html presentations/your-name/index.html
 PRESENTATIONS.push({ presenter: "Your Name", slug: "your-name", title: "Paper Title", authors: "Author and Author (2024)", source: "Journal of Finance 79, 1–40", date: "2026-10-15" });
 ```
 
-`slug` must match your folder name — that is what the collection page links to.
+`slug` must match your folder name. By default the entry links to that
+folder's `index.html`.
+
+If you present more than once, give each talk its own page and add an optional
+`page` field pointing at it, so every row links straight to the right talk:
+
+```js
+PRESENTATIONS.push({ presenter: "Your Name", slug: "your-name", page: "your-name/p2.html", title: "Second Paper", authors: "Author (2008)", source: "Journal of Finance 63, 921–945", date: "2026-09-15" });
+```
+
+The class convention is `p1.html`, `p2.html`, ... inside your folder, with an
+`index.html` listing them.
 
 **5. Commit and merge into `main`.**
 
